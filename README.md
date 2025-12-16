@@ -15,19 +15,11 @@ Java JSP/Servlet web application deployed as a WAR on GlassFish with an embedded
 - Session-based access control
 
 ## How to Run 
-### Option A: Deploy the included WAR (fastest)
+### Deploy the included WAR 
 1. Start GlassFish.
-2. Deploy the WAR from: `target/LoginWebApp-1.0.war` (or `target/LoginWebApp-1.0-SNAPSHOT.war`)
+2. Deploy the WAR from: (`target/LoginWebApp-1.0-SNAPSHOT.war`)
 3. Open the app in a browser:
    - `http://localhost:8080/LoginWebApp/` (default GlassFish HTTP port)
-
-### Option B: Build from source (Maven)
-1. Open the project in IntelliJ.
-2. In the Maven tool window, run:
-   - `Lifecycle -> clean`
-   - `Lifecycle -> package`
-3. Deploy the generated WAR from the `target/` folder to GlassFish.
-4. Open: `http://localhost:8080/LoginWebApp/`
 
 ## Database Notes 
 - This project uses **embedded Apache Derby**.
