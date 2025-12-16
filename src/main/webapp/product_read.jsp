@@ -11,8 +11,8 @@
 
 <p>
     <a href="${pageContext.request.contextPath}/products/create">Create New Product</a> |
-    <a href="${pageContext.request.contextPath}/admin/logout">Logout</a>
-</p>
+    <a href="${pageContext.request.contextPath}/admin/logout">Logout</a> |
+    <a href="${pageContext.request.contextPath}/index.jsp">Back to Home</a>
 
 <table border="1" cellpadding="5" cellspacing="0">
     <tr>
@@ -39,7 +39,10 @@
         <td><%= p.getProductPrice() %></td>
         <td>
             <a href="${pageContext.request.contextPath}/products/update?id=<%= p.getProductId() %>">Edit</a> |
-            <a href="${pageContext.request.contextPath}/products/delete?id=<%= p.getProductId() %>">Delete</a>
+            <form action="${pageContext.request.contextPath}/products/delete" method="post" style="display:inline">
+                <input type="hidden" name="product_id" value="<%= p.getProductId() %>" />
+                <button type="submit">Delete</button>
+            </form>
         </td>
     </tr>
     <%

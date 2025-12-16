@@ -12,6 +12,8 @@
     <li><a href="${pageContext.request.contextPath}/customers">Customer List</a></li>
     <li><a href="${pageContext.request.contextPath}/shoes.jsp">Shoe Selector</a></li>
     <li><a href="${pageContext.request.contextPath}/products">Product Management (DB)</a></li>
+    <li><a href="${pageContext.request.contextPath}/product_read.jsp">View Shoe Products</a></li>
+
 </ul>
 
 </body>

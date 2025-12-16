@@ -50,5 +50,7 @@
     <input type="submit" value="Save Product">
 </form>
 
+<p><a href="${pageContext.request.contextPath}/index.jsp">Back to Home</a></p>
+
 </body>
 </html>
