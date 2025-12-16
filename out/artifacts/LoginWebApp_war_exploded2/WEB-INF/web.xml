@@ -7,6 +7,11 @@
 
     <display-name>LoginWebApp</display-name>
 
+    <!-- Run DB migrations on startup (Flyway 3.2.1) -->
+    <listener>
+        <listener-class>core.FlywayMigrationListener</listener-class>
+    </listener>
+
     <welcome-file-list>
         <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>

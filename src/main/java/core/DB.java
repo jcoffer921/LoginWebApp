@@ -2,7 +2,11 @@ package core;
 
 /**
  * Simple database utility for obtaining JDBC connections to the embedded Derby DB
- * and ensuring required schema objects exist. Returns a NEW connection per call.
+ * and ensuring required schema objects exist.
+ *
+ * - Uses an embedded Derby database
+ * - Automatically creates the database and tables on first run
+ * - Uses a portable path (works on any machine)
  */
 
 import java.sql.Connection;
@@ -12,9 +16,13 @@ import java.sql.Statement;
 
 public class DB {
 
-    // Use an absolute path so GlassFish always hits the SAME database
+    /**
+     * Portable Derby DB location.
+     * Creates LoginWebAppDB inside the user's home directory
+     * (works on Windows, macOS, Linux).
+     */
     private static final String URL =
-            "jdbc:derby:C:/Users/jcoff/derby/LoginWebAppDB;create=true";
+            "jdbc:derby:" + System.getProperty("user.home") + "/LoginWebAppDB;create=true";
 
     static {
         try {
@@ -25,8 +33,8 @@ public class DB {
     }
 
     /**
-     * Returns a NEW connection each call (safe for web apps).
-     * Ensures the required tables exist.
+     * Returns a NEW database connection per call (safe for web apps).
+     * Ensures required tables exist.
      */
     public static Connection getConnection() throws SQLException {
         Connection conn = DriverManager.getConnection(URL);
@@ -35,39 +43,45 @@ public class DB {
     }
 
     /**
-     * Creates required tables if they don't exist.
-     * Safe to call repeatedly because we ignore "already exists" errors.
+     * Creates required tables if they do not exist.
+     * Only ignores the Derby "table already exists" error.
      */
     private static void ensureSchema(Connection conn) throws SQLException {
 
-        // PRODUCT table required by assignment
-        try (Statement st = conn.createStatement()) {
-            st.executeUpdate("""
-                CREATE TABLE product (
-                    product_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-                    product_name VARCHAR(120) NOT NULL,
-                    product_description VARCHAR(500),
-                    product_color VARCHAR(50),
-                    product_size VARCHAR(20),
-                    product_price DECIMAL(10,2) NOT NULL
-                )
-            """);
-        } catch (SQLException ignore) {
-            // table already exists -> ignore
-        }
+        createTable(conn, """
+            CREATE TABLE product (
+                product_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                product_name VARCHAR(120) NOT NULL,
+                product_description VARCHAR(500),
+                product_color VARCHAR(50),
+                product_size VARCHAR(20),
+                product_price DECIMAL(10,2) NOT NULL
+            )
+        """);
 
-        // CUSTOMER table (since you already use it)
+        createTable(conn, """
+            CREATE TABLE customer (
+                id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                first_name VARCHAR(100),
+                last_name VARCHAR(100),
+                favorite_meal VARCHAR(100)
+            )
+        """);
+    }
+
+    /**
+     * Executes a CREATE TABLE statement.
+     * Ignores Derby SQLState X0Y32 (table already exists).
+     * Throws all other SQL errors.
+     */
+    private static void createTable(Connection conn, String sql) throws SQLException {
         try (Statement st = conn.createStatement()) {
-            st.executeUpdate("""
-                CREATE TABLE customer (
-                    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-                    first_name VARCHAR(100),
-                    last_name VARCHAR(100),
-                    favorite_meal VARCHAR(100)
-                )
-            """);
-        } catch (SQLException ignore) {
-            // table already exists -> ignore
+            st.executeUpdate(sql);
+        } catch (SQLException e) {
+            // Derby SQLState for "Table/View already exists"
+            if (!"X0Y32".equals(e.getSQLState())) {
+                throw e;
+            }
         }
     }
 }
