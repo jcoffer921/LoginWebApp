@@ -1,10 +1,9 @@
 # LoginWebApp
-
-Java JSP/Servlet web application using GlassFish and Apache Derby.
+Java JSP/Servlet web application deployed as a WAR on GlassFish with an embedded Apache Derby database.
 
 ## Tech Stack
-- Java
-- JSP / Servlets
+- Java (JDK 17 recommended)
+- JSP / Servlets (Jakarta Servlet API)
 - GlassFish Server
 - Apache Derby (Embedded)
 - Maven
@@ -12,12 +11,36 @@ Java JSP/Servlet web application using GlassFish and Apache Derby.
 ## Features
 - Admin login
 - Product CRUD (Create, Read, Update, Delete)
-- Derby database persistence
+- Embedded Derby database persistence (auto-creates DB + tables on first run)
 - Session-based access control
 
-## How to Run
-1. Open in IntelliJ Ultimate
-2. Configure GlassFish Server
-3. Run using JDK 21
-4. Access:
-   http://localhost:8081/LoginWebApp/
+## How to Run (Grader Instructions)
+### Option A: Deploy the included WAR (fastest)
+1. Start GlassFish.
+2. Deploy the WAR from: `target/LoginWebApp-1.0.war` (or `target/LoginWebApp-1.0-SNAPSHOT.war`)
+3. Open the app in a browser:
+   - `http://localhost:8080/LoginWebApp/` (default GlassFish HTTP port)
+
+### Option B: Build from source (Maven)
+1. Open the project in IntelliJ.
+2. In the Maven tool window, run:
+   - `Lifecycle -> clean`
+   - `Lifecycle -> package`
+3. Deploy the generated WAR from the `target/` folder to GlassFish.
+4. Open: `http://localhost:8080/LoginWebApp/`
+
+## Database Notes (Important)
+- This project uses **embedded Apache Derby**.
+- The database and tables are **created automatically** on first run (no manual SQL setup required).
+- The DB is stored in the user’s home directory (portable across machines).
+
+## Troubleshooting
+### Port 8080 already in use
+If GlassFish fails to start because 8080 is in use, either:
+- Change GlassFish HTTP port (e.g., to 8081), then open:
+  `http://localhost:8081/LoginWebApp/`
+OR
+- Stop the process using 8080 (Windows PowerShell):
+  ```powershell
+  netstat -ano | findstr :8080
+  taskkill /PID <PID> /F
