@@ -14,7 +14,7 @@ Java JSP/Servlet web application deployed as a WAR on GlassFish with an embedded
 - Embedded Derby database persistence (auto-creates DB + tables on first run)
 - Session-based access control
 
-## How to Run (Grader Instructions)
+## How to Run 
 ### Option A: Deploy the included WAR (fastest)
 1. Start GlassFish.
 2. Deploy the WAR from: `target/LoginWebApp-1.0.war` (or `target/LoginWebApp-1.0-SNAPSHOT.war`)
@@ -29,7 +29,7 @@ Java JSP/Servlet web application deployed as a WAR on GlassFish with an embedded
 3. Deploy the generated WAR from the `target/` folder to GlassFish.
 4. Open: `http://localhost:8080/LoginWebApp/`
 
-## Database Notes (Important)
+## Database Notes 
 - This project uses **embedded Apache Derby**.
 - The database and tables are **created automatically** on first run (no manual SQL setup required).
 - The DB is stored in the user’s home directory (portable across machines).
